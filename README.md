@@ -2,11 +2,9 @@
 
 > Code of the paper "Deep learning from phylogenies for diversification analysis" including pretrained neural networks.
 
-## In this repository, you can find:
+### In this repository, you can find:
 
--------
-
-- `simulators` used for simulating training, validation and testing sets both for BD and BiSSE in the folder [simulators](deeptimelearning/master/simulators).
+- `simulators` used for simulating training, validation and testing sets both for BD and BiSSE in the folder [simulators](/deeptimelearning/master/simulators).
 - `neural_networks` containing:
   - scripts for encoding phylogenies into Compact Diversity Vector (CDV) and Summary statistics (SS) for BD (SS and CDV) and BiSSE (CDV with tip information) models in the folder ./neural_networks/encoding_phylo.
   -  scripts for training the neural networks, both for CNN and FFNN using CDV or SS for BD and BiSSE models in the folder ./neural_networks/training_NN.
@@ -21,8 +19,6 @@ The simulators, scripts for encoding and MLE inference were part of a pipeline, 
 
 
 ## Preprint:
-
--------
 
 Lambert S, Voznica J, Morlon H (2022)
 __Deep learning from phylogenies for diversification analysis__. [bioRxiv](https://www.biorxiv.org/)
