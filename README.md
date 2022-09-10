@@ -1,6 +1,6 @@
 # deeptimelearning
 
-> Code of the paper "Deep learning from phylogenies for diversification analysis" including pretrained neural networks.
+> Code of the paper "Deep learning from phylogenies for diversification analysis" including pre-trained neural networks.
 
 ### In this repository, you can find:
 
