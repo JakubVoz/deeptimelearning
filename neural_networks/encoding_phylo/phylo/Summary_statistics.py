@@ -503,33 +503,26 @@ def compute_chain_stats(tre, order=4):
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description='Encodes tree starting from deepest leaf')
+    parser = argparse.ArgumentParser(description='Encodes tree starting into Summary statistics. Call script from terminal with: python3 Summary_statistics.py -t ./filename.nwk >> encoded_SS.csv')
     parser.add_argument('-t', '--tree', type=str, help='name of the tree on which we work')
-    parser.add_argument('--id', type=int, help='id of the tree on which we work')
-    parser.add_argument('--step', type=int, help='number of trees in a package of trees')
     args = parser.parse_args()
 
+    # read nwk file with trees
     tree = str(args.tree)
-
-    id = int(args.id)
-
-    step = int(args.step)
-
     file = open(tree, mode="r")
-
     forest = file.read().replace("\n", "")
-
     trees = forest.split(";")
 
-    indices = range(id, min(id+len(trees), id+step))
+    # initialize output table
+    indices = range(0, len(trees))
     summaries = pd.DataFrame(index=indices, columns=col)
 
-    for i in range(0, min(step, len(trees))):
+    # encode tree by tree
+    for i in range(0, len(trees)):
 
-        ind = indices[i]
         tr = Tree(trees[i] + ";", format=1)
 
-        summaries.loc[ind, ['rescale_factor']] = rescale_tree(tr, target_avg_length=target_avg_BL)
+        summaries.loc[i, ['rescale_factor']] = rescale_tree(tr, target_avg_length=target_avg_BL)
 
         name_tree(tr)
         max_depth = add_depth_and_get_max(tr)
@@ -537,35 +530,33 @@ if __name__ == '__main__':
         add_ladder(tr)
 
         # Sumstats based on branch lengths
-        summaries.loc[ind, ['stem_age']] = tree_height(tr)
+        summaries.loc[i, ['stem_age']] = tree_height(tr)
 
-        summaries.loc[ind, ['a_bl_mean', 'a_bl_median', 'a_bl_var', 'e_bl_mean', 'e_bl_median', 'e_bl_var']] = branches(tr)
-        summaries.loc[ind, ['i_bl_mean_1', 'i_bl_median_1', 'i_bl_var_1', 'i_bl_mean_2', 'i_bl_median_2', 'i_bl_var_2',
+        summaries.loc[i, ['a_bl_mean', 'a_bl_median', 'a_bl_var', 'e_bl_mean', 'e_bl_median', 'e_bl_var']] = branches(tr)
+        summaries.loc[i, ['i_bl_mean_1', 'i_bl_median_1', 'i_bl_var_1', 'i_bl_mean_2', 'i_bl_median_2', 'i_bl_var_2',
                             'i_bl_mean_3', 'i_bl_median_3', 'i_bl_var_3', 'ie_bl_mean_1', 'ie_bl_median_1', 'ie_bl_var_1',
                             'ie_bl_mean_2', 'ie_bl_median_2', 'ie_bl_var_2', 'ie_bl_mean_3', 'ie_bl_median_3', 'ie_bl_var_3'
-                            ]] = piecewise_branches(tr, summaries.loc[ind, 'stem_age'], summaries.loc[ind, 'e_bl_mean'],
-                                                    summaries.loc[ind, 'e_bl_median'], summaries.loc[ind, 'e_bl_var'])
+                            ]] = piecewise_branches(tr, summaries.loc[i, 'stem_age'], summaries.loc[i, 'e_bl_mean'],
+                                                    summaries.loc[i, 'e_bl_median'], summaries.loc[i, 'e_bl_var'])
 
         # Sumstats based on tree topology
-        summaries.loc[ind, ['colless']] = colless(tr)
-        summaries.loc[ind, ['sackin']] = sackin(tr)
-        summaries.loc[ind, ['wd_ratio', 'delta_w']] = wd_ratio_delta_w(tr, max_dep=max_depth)
-        summaries.loc[ind, ['max_ladder', 'il_nodes']] = max_ladder_il_nodes(tr)
-        summaries.loc[ind, ['staircaseness_1', 'staircaseness_2']] = staircaseness(tr)
+        summaries.loc[i, ['colless']] = colless(tr)
+        summaries.loc[i, ['sackin']] = sackin(tr)
+        summaries.loc[i, ['wd_ratio', 'delta_w']] = wd_ratio_delta_w(tr, max_dep=max_depth)
+        summaries.loc[i, ['max_ladder', 'il_nodes']] = max_ladder_il_nodes(tr)
+        summaries.loc[i, ['staircaseness_1', 'staircaseness_2']] = staircaseness(tr)
 
         # Sumstats based on LTT plot
         LTT_plot_matrix = ltt_plot(tr)
 
-        summaries.loc[ind, col_EmmaLTT] = ltt_plot_comput(tr)
+        summaries.loc[i, col_EmmaLTT] = ltt_plot_comput(tr)
         # Sumstats COORDINATES
-        summaries.loc[
-            ind, col_EmmaLTT_COOR] = coordinates_comp(LTT_plot_matrix)
+        summaries.loc[i, col_EmmaLTT_COOR] = coordinates_comp(LTT_plot_matrix)
 
-        summaries.loc[
-            ind, ['nb_tips']] = len(tr)
+        summaries.loc[i, ['nb_tips']] = len(tr)
 
         add_height(tr)
 
-        summaries.loc[ind, col_chains] = compute_chain_stats(tr, order=4)
+        summaries.loc[i, col_chains] = compute_chain_stats(tr, order=4)
 
 sys.stdout.write(summaries.to_csv(sep='\t', index=True, index_label='Index'))

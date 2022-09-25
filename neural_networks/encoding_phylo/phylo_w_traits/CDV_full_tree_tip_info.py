@@ -195,31 +195,21 @@ def complete_coding(encoding, max_length):
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description='Encodes tree starting from deepest leaf')
+    parser = argparse.ArgumentParser(description='Encodes tree into full tree representation with tip states. Call script from terminal with: python3 CDV_full_tree.py -t ./filename.nwk >> encoded_full_tree.csv')
     parser.add_argument('-t', '--tree', type=str, help='name of the tree on which we work')
-    parser.add_argument('--id', type=int, help='id of the tree on which we work')
-    parser.add_argument('--step', type=int, help='number of trees in a package of trees')
     args = parser.parse_args()
 
+    # read nwk file with trees
     tree = str(args.tree)
-
-    id = int(args.id)
-
-    step = int(args.step)
-
     file = open(tree, mode="r")
-
     forest = file.read().replace("\n", "")
+    trees = forest.split(";")  # split to individual trees
 
-    trees = forest.split(";")
-
-    for i in range(0, min(step, len(trees))):
+    for i in range(0, len(trees)):
 
         if len(trees[i]) > 0:
             tree = Tree(trees[i] + ";", format=1)
-
             set_attribs(tree)
-
             name_tree(tree)
 
             # rescale tree to average branch length of 1
