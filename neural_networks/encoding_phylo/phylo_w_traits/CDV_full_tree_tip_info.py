@@ -196,7 +196,7 @@ def complete_coding(encoding, max_length):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Encodes tree into full tree representation with tip states. Call script from terminal with: python3 CDV_full_tree.py -t ./filename.nwk >> encoded_full_tree.csv')
-    parser.add_argument('-t', '--tree', type=str, help='name of the tree on which we work')
+    parser.add_argument('-t', '--tree', type=str, help='name of the file with nwk trees')
     args = parser.parse_args()
 
     # read nwk file with trees

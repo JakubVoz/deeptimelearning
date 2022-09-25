@@ -316,7 +316,7 @@ def max_ladder_il_nodes(tre):
                 max_ladder_score = node.ladder
             if node.ladder > 0:
                 il_nodes += 1
-    return max_ladder_score/len(tr), il_nodes/(len(tr)-1)
+    return max_ladder_score/len(tre), il_nodes/(len(tre)-1)
 
 
 def staircaseness(tre):
@@ -504,7 +504,7 @@ def compute_chain_stats(tre, order=4):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Encodes tree starting into Summary statistics. Call script from terminal with: python3 Summary_statistics.py -t ./filename.nwk >> encoded_SS.csv')
-    parser.add_argument('-t', '--tree', type=str, help='name of the tree on which we work')
+    parser.add_argument('-t', '--tree', type=str, help='name of the file with nwk trees')
     args = parser.parse_args()
 
     # read nwk file with trees
@@ -520,43 +520,43 @@ if __name__ == '__main__':
     # encode tree by tree
     for i in range(0, len(trees)):
 
-        tr = Tree(trees[i] + ";", format=1)
+        if len(trees[i]) > 0:
+            tr = Tree(trees[i] + ";", format=1)
+            summaries.loc[i, ['rescale_factor']] = rescale_tree(tr, target_avg_length=target_avg_BL)
 
-        summaries.loc[i, ['rescale_factor']] = rescale_tree(tr, target_avg_length=target_avg_BL)
+            name_tree(tr)
+            max_depth = add_depth_and_get_max(tr)
+            add_dist_to_root(tr)
+            add_ladder(tr)
 
-        name_tree(tr)
-        max_depth = add_depth_and_get_max(tr)
-        add_dist_to_root(tr)
-        add_ladder(tr)
+            # Sumstats based on branch lengths
+            summaries.loc[i, ['stem_age']] = tree_height(tr)
 
-        # Sumstats based on branch lengths
-        summaries.loc[i, ['stem_age']] = tree_height(tr)
+            summaries.loc[i, ['a_bl_mean', 'a_bl_median', 'a_bl_var', 'e_bl_mean', 'e_bl_median', 'e_bl_var']] = branches(tr)
+            summaries.loc[i, ['i_bl_mean_1', 'i_bl_median_1', 'i_bl_var_1', 'i_bl_mean_2', 'i_bl_median_2', 'i_bl_var_2',
+                                'i_bl_mean_3', 'i_bl_median_3', 'i_bl_var_3', 'ie_bl_mean_1', 'ie_bl_median_1', 'ie_bl_var_1',
+                                'ie_bl_mean_2', 'ie_bl_median_2', 'ie_bl_var_2', 'ie_bl_mean_3', 'ie_bl_median_3', 'ie_bl_var_3'
+                                ]] = piecewise_branches(tr, summaries.loc[i, 'stem_age'], summaries.loc[i, 'e_bl_mean'],
+                                                        summaries.loc[i, 'e_bl_median'], summaries.loc[i, 'e_bl_var'])
 
-        summaries.loc[i, ['a_bl_mean', 'a_bl_median', 'a_bl_var', 'e_bl_mean', 'e_bl_median', 'e_bl_var']] = branches(tr)
-        summaries.loc[i, ['i_bl_mean_1', 'i_bl_median_1', 'i_bl_var_1', 'i_bl_mean_2', 'i_bl_median_2', 'i_bl_var_2',
-                            'i_bl_mean_3', 'i_bl_median_3', 'i_bl_var_3', 'ie_bl_mean_1', 'ie_bl_median_1', 'ie_bl_var_1',
-                            'ie_bl_mean_2', 'ie_bl_median_2', 'ie_bl_var_2', 'ie_bl_mean_3', 'ie_bl_median_3', 'ie_bl_var_3'
-                            ]] = piecewise_branches(tr, summaries.loc[i, 'stem_age'], summaries.loc[i, 'e_bl_mean'],
-                                                    summaries.loc[i, 'e_bl_median'], summaries.loc[i, 'e_bl_var'])
+            # Sumstats based on tree topology
+            summaries.loc[i, ['colless']] = colless(tr)
+            summaries.loc[i, ['sackin']] = sackin(tr)
+            summaries.loc[i, ['wd_ratio', 'delta_w']] = wd_ratio_delta_w(tr, max_dep=max_depth)
+            summaries.loc[i, ['max_ladder', 'il_nodes']] = max_ladder_il_nodes(tr)
+            summaries.loc[i, ['staircaseness_1', 'staircaseness_2']] = staircaseness(tr)
 
-        # Sumstats based on tree topology
-        summaries.loc[i, ['colless']] = colless(tr)
-        summaries.loc[i, ['sackin']] = sackin(tr)
-        summaries.loc[i, ['wd_ratio', 'delta_w']] = wd_ratio_delta_w(tr, max_dep=max_depth)
-        summaries.loc[i, ['max_ladder', 'il_nodes']] = max_ladder_il_nodes(tr)
-        summaries.loc[i, ['staircaseness_1', 'staircaseness_2']] = staircaseness(tr)
+            # Sumstats based on LTT plot
+            LTT_plot_matrix = ltt_plot(tr)
 
-        # Sumstats based on LTT plot
-        LTT_plot_matrix = ltt_plot(tr)
+            summaries.loc[i, col_EmmaLTT] = ltt_plot_comput(tr)
+            # Sumstats COORDINATES
+            summaries.loc[i, col_EmmaLTT_COOR] = coordinates_comp(LTT_plot_matrix)
 
-        summaries.loc[i, col_EmmaLTT] = ltt_plot_comput(tr)
-        # Sumstats COORDINATES
-        summaries.loc[i, col_EmmaLTT_COOR] = coordinates_comp(LTT_plot_matrix)
+            summaries.loc[i, ['nb_tips']] = len(tr)
 
-        summaries.loc[i, ['nb_tips']] = len(tr)
+            add_height(tr)
 
-        add_height(tr)
-
-        summaries.loc[i, col_chains] = compute_chain_stats(tr, order=4)
+            summaries.loc[i, col_chains] = compute_chain_stats(tr, order=4)
 
 sys.stdout.write(summaries.to_csv(sep='\t', index=True, index_label='Index'))
