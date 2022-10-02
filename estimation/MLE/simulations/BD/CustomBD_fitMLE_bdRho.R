@@ -10,7 +10,7 @@
 ## with the appropriate arguments
 ## but just with less options.
 
-## make sure you have the package phytools and ape downloaded
+## make sure you have the package phytools, TreeSim and ape downloaded
 
 args <- commandArgs(TRUE)
 indice <- as.numeric(args[1])
