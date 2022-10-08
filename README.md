@@ -6,14 +6,14 @@
 
 -------
 
-- `simulators` used for simulating training, validation and testing sets both for BD and BiSSE in the folder [simulators](/simulators).
+- `simulators` used for simulating training, validation and testing sets both for BD (a python script) and BiSSE (an R script) in the folder [simulators](/simulators).
 - `neural_networks` containing:
-  - scripts for encoding phylogenies into Compact Diversity Vector (CDV) and Summary statistics (SS) for BD (SS and CDV) and BiSSE (CDV with tip information) models in the folder [encoding_phylo](/neural_networks/encoding_phylo). You call the scripts from terminal with: 
+  - scripts for encoding phylogenies into Compact Diversity Vector (CDV) and Summary statistics (SS) for BD (SS and CDV) and BiSSE (CDV with tip information) models in the folder [encoding_phylo](/neural_networks/encoding_phylo). You call the scripts from terminal with (the input tree(s) must be in newick format): 
 ```bash
 python3 encoding_script_name.py -t filename_forest.nwk > ./encoding_output.csv
 ```
-  - scripts for training the neural networks, both for CNN and FFNN using CDV or SS for BD and BiSSE models in the folder [training_NN](/neural_networks/training_NN).
-  - the pre-trained neural networks and scalers used in the paper, both for BD and BiSSE model, in the folder [pretrained_NN](/neural_networks/pretrained_NN).
+  - scripts for training the neural networks (in ipynb format), both for CNN and FFNN using CDV or SS for BD and BiSSE models in the folder [training_NN](/neural_networks/training_NN).
+  - the pre-trained neural networks (including models in json and weights in h5 format) and scalers used in the paper, both for BD and BiSSE model, in the folder [pretrained_NN](/neural_networks/pretrained_NN).
 - `estimation` scripts for:
   - Maximum Likelihood Estimation (MLE) in the folder [MLE](/estimation/MLE) for both BD (with the package UDivEvo) and BiSSE (with packages castor and diversitree).
   - Neural Network (NN) estimation in the folder [NN](/estimation/NN) for both BD and BiSSE (using CNN and FFNN) on simulations and for BiSSE (using CNN) on the empirical phylogeny of primates. These can be easily adapted for other pre-trained NNs. Concerning the empirical phylogeny, you will find in the folder [empirical](/estimation/NN/empirical) a tutorial to use Jupiter Notebook and the pre-trained neural network as well as the codes for the sanity check performed in the paper on summary statistics.
