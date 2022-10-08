@@ -20,7 +20,7 @@ python3 encoding_script_name.py -t filename_forest.nwk > ./encoding_output.csv
 - `data` containing all the data used and generated for the analysis on simulations and on the empirical phylogeny of primates in the folder [data](/data). Note that the simulated phylogenies are not provided here due the file sizes exceeding limits of github.
 - `results_analysis` containing all the scripts for analysing the results of the estimation and making the figures and tables for the related paper in the folder [results_analysis](/results_analysis).
 
-Scripts for simulations, encoding and MLE are callable functions and you may need to adapt the input arguments.
+Scripts for simulations and encoding are callable functions.
 
 ## Preprint:
 
