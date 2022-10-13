@@ -9,9 +9,9 @@
 - `simulators` used for simulating training, validation and testing sets both for BD (a python script) and BiSSE (an R script) in the folder [simulators](/simulators).
 - `neural_networks` containing:
   - scripts for encoding phylogenies into Compact Diversity Vector (CDV) and Summary statistics (SS) for BD (SS and CDV) and BiSSE (CDV with tip information) models in the folder [encoding_phylo](/neural_networks/encoding_phylo). You call the scripts from terminal with (the input tree(s) must be in newick format): 
-```bash
-python3 encoding_script_name.py -t filename_forest.nwk > ./encoding_output.csv
-```
+  ```bash 
+  python3 encoding_script_name.py -t filename_forest.nwk > ./encoding_output.csv
+  ```
   - scripts for training the neural networks (in ipynb format), both for CNN and FFNN using CDV or SS for BD and BiSSE models in the folder [training_NN](/neural_networks/training_NN).
   - the pre-trained neural networks (including models in json and weights in h5 format) and scalers used in the paper, both for BD and BiSSE model, in the folder [pretrained_NN](/neural_networks/pretrained_NN).
 - `estimation` scripts for:
