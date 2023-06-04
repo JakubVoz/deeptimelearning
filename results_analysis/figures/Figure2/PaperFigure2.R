@@ -79,9 +79,6 @@ grps <- c(expression(lambda), expression(mu), expression(r), expression(epsilon)
 mtext (grps[2], at = seq(from = (length(TechniquesNames[condInterest])+1)/2, to = length(TechniquesNames[condInterest])*nbEstimRates,
                          by = length(TechniquesNames[condInterest])), side = 1, line = 2, font=2, cex = 2)
 abline(h = 0, lty = 2, lwd= 0.5)
-# legend(1, 0.38, legend=TechniquesNames[condInterest],
-#        col=colorsParam2[condInterest], lwd=2, cex=1, box.lty=0,
-#        bg="transparent")
 points(meanE[5:8], col = "black", pch = 16)
 mtext (paste0("n=",nrow(ErrorCal[[1]])), at = c(4), lwd=2, cex=1)
 

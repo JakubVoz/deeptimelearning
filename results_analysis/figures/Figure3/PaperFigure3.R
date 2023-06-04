@@ -37,6 +37,18 @@ focusAbsE <- list(AbsErrorCal[[condInterest[1]]]$lambda1AbsError, AbsErrorCal[[c
                   AbsErrorCal[[condInterest[3]]]$q01AbsError, AbsErrorCal[[condInterest[4]]]$q01AbsError)
 meanAbsE <- unlist(lapply(focusAbsE, function(x) mean(x, na.rm = TRUE)))
 
+focusE <- list(ErrorCal[[condInterest[1]]]$lambda1Error, ErrorCal[[condInterest[2]]]$lambda1Error,
+               ErrorCal[[condInterest[3]]]$lambda1Error, ErrorCal[[condInterest[4]]]$lambda1Error,
+               ErrorCal[[condInterest[1]]]$lambda2Error, ErrorCal[[condInterest[2]]]$lambda2Error,
+               ErrorCal[[condInterest[3]]]$lambda2Error, ErrorCal[[condInterest[4]]]$lambda2Error,
+               ErrorCal[[condInterest[1]]]$mu1Error, ErrorCal[[condInterest[2]]]$mu1Error,
+               ErrorCal[[condInterest[3]]]$mu1Error, ErrorCal[[condInterest[4]]]$mu1Error,
+               ErrorCal[[condInterest[1]]]$mu2Error, ErrorCal[[condInterest[2]]]$mu2Error,
+               ErrorCal[[condInterest[3]]]$mu2Error, ErrorCal[[condInterest[4]]]$mu2Error,
+               ErrorCal[[condInterest[1]]]$q01Error, ErrorCal[[condInterest[2]]]$q01Error,
+               ErrorCal[[condInterest[3]]]$q01Error, ErrorCal[[condInterest[4]]]$q01Error)
+meanE <- unlist(lapply(focusE, function(x) mean(x, na.rm = TRUE)))
+
 ## BIAS
 # Swarm plot pannels
 # 1
@@ -61,16 +73,23 @@ beeswarm::beeswarm(list(ErrorCal[[condInterest[1]]]$lambda1Error, ErrorCal2Outli
                    col = colorsParam2[condInterest], labels = c(""),
                    ylim = c(-0.9, 1), cex.axis = 1.5)
 
-mtext("Bias", side = 2, line = 2.4, cex = 2.5)
-grps <- paste0(round(meanAbsE[1:4], digits = 2))
+mtext("Error", side = 2, line = 2.4, cex = 2.5)
+grps <- round(meanAbsE[1:4], digits = 2)
 mtext (grps, at = (1:(nbEstimRates*length(TechniquesNames[condInterest])))[1:4], side = 1, line = 0.5, font=2, cex = 2,
        col = colorsParam2[condInterest])
 mtext ("MAE", at = 0.3, side = 1, line = 0.5, font=2, cex = 2)
 grps <- c(expression(lambda*1), expression(lambda*2),
           expression(mu*1), expression(mu*2), expression("q12 = q21"))
-mtext (grps[1], at = seq(from = (length(TechniquesNames[condInterest])+1)/2, to = length(TechniquesNames[condInterest])*nbEstimRates,
+mtext (grps[1], at = seq(from = (length(TechniquesNames[condInterest])+1)/2,
+                         to = length(TechniquesNames[condInterest])*nbEstimRates,
                          by = length(TechniquesNames[condInterest])), side = 1, line = 2, font=2, cex = 2.5)
+points(meanE[1:4], col = "black", pch = 16)
 abline(h = 0, lty = 2, lwd= 0.5)
+grps2 <- c("CNN-CDV", "MLE \ncastor", "MLE \ndiversitree", "FFNN-CDV")
+mtext (grps2,
+       at = (1:(nbEstimRates*length(TechniquesNames[condInterest])))[1:4],
+       side = 1, line = -29, font=2, cex = 1.4,
+       col = colorsParam2[condInterest])
 
 # 2
 
@@ -94,7 +113,7 @@ beeswarm::beeswarm(list(ErrorCal[[condInterest[1]]]$lambda2Error, ErrorCal2Outli
                    col = colorsParam2[condInterest], labels = c(""),
                    ylim = c(-0.9, 1), cex.axis = 1.5)
 
-grps <- paste0(round(meanAbsE[5:8], digits = 2))
+grps <- round(meanAbsE[5:8], digits = 2)
 mtext (grps, at = (1:(nbEstimRates*length(TechniquesNames[condInterest])))[1:4], side = 1, line = 0.5, font=2, cex = 2,
        col = colorsParam2[condInterest])
 mtext ("MAE", at = 0.3, side = 1, line = 0.5, font=2, cex = 2)
@@ -102,11 +121,12 @@ grps <- c(expression(lambda*1), expression(lambda*2),
           expression(mu*1), expression(mu*2), expression("q12 = q21"))
 mtext (grps[2], at = seq(from = (length(TechniquesNames[condInterest])+1)/2, to = length(TechniquesNames[condInterest])*nbEstimRates,
                          by = length(TechniquesNames[condInterest])), side = 1, line = 2, font=2, cex = 2.5)
+points(meanE[5:8], col = "black", pch = 16)
 abline(h = 0, lty = 2, lwd= 0.5)
-grps2 <- c("CNN-CDV", "MLE castor", "MLE diversitree", "FFNN-CDV")
-legend(2.64, 1.14, legend=grps2,
-       col=colorsParam2[condInterest], lwd=2, cex=1.5, box.lty=0,
-       bg="transparent", y.intersp = 0.8)
+# grps2 <- c("CNN-CDV", "MLE castor", "MLE diversitree", "FFNN-CDV")
+# legend(2.64, 1.14, legend=grps2,
+#        col=colorsParam2[condInterest], lwd=2, cex=1.5, box.lty=0,
+#        bg="transparent", y.intersp = 0.8)
 mtext (paste0("n=",nrow(ErrorCal[[1]])), at = c(4), lwd=2, cex=1.5)
 
 # 3
@@ -131,8 +151,8 @@ beeswarm::beeswarm(list(ErrorCal[[condInterest[1]]]$mu1Error, ErrorCal2Outliers,
                    col = colorsParam2[condInterest], labels = c(""),
                    ylim = c(-0.9, 1), cex.axis = 1.5)
 
-mtext("Bias", side = 2, line = 2.4, cex = 2.5)
-grps <- paste0(round(meanAbsE[9:12], digits = 2))
+mtext("Error", side = 2, line = 2.4, cex = 2.5)
+grps <- round(meanAbsE[9:12], digits = 2)
 mtext (grps, at = (1:(nbEstimRates*length(TechniquesNames[condInterest])))[1:4], side = 1, line = 0.5, font=2, cex = 2,
        col = colorsParam2[condInterest])
 mtext ("MAE", at = 0.3, side = 1, line = 0.5, font=2, cex = 2)
@@ -141,6 +161,7 @@ grps <- c(expression(lambda*1), expression(lambda*2),
 mtext (grps[3], at = seq(from = (length(TechniquesNames[condInterest])+1)/2, to = length(TechniquesNames[condInterest])*nbEstimRates,
                          by = length(TechniquesNames[condInterest])), side = 1, line = 2, font=2, cex = 2.5)
 abline(h = 0, lty = 2, lwd= 0.5)
+points(meanE[9:12], col = "black", pch = 16)
 
 # 4
 
@@ -164,7 +185,7 @@ beeswarm::beeswarm(list(ErrorCal[[condInterest[1]]]$mu2Error, ErrorCal2Outliers,
                    col = colorsParam2[condInterest], labels = c(""),
                    ylim = c(-0.9, 1), cex.axis = 1.5)
 
-grps <- paste0(round(meanAbsE[13:16], digits = 2))
+grps <- round(meanAbsE[13:16], digits = 2)
 mtext (grps, at = (1:(nbEstimRates*length(TechniquesNames[condInterest])))[1:4], side = 1, line = 0.5, font=2, cex = 2,
        col = colorsParam2[condInterest])
 mtext ("MAE", at = 0.3, side = 1, line = 0.5, font=2, cex = 2)
@@ -173,6 +194,7 @@ grps <- c(expression(lambda*1), expression(lambda*2),
 mtext (grps[4], at = seq(from = (length(TechniquesNames[condInterest])+1)/2, to = length(TechniquesNames[condInterest])*nbEstimRates,
                          by = length(TechniquesNames[condInterest])), side = 1, line = 2, font=2, cex = 2.5)
 abline(h = 0, lty = 2, lwd= 0.5)
+points(meanE[13:16], col = "black", pch = 16)
 
 # 5
 
@@ -198,8 +220,8 @@ beeswarm::beeswarm(list(ErrorCal[[condInterest[1]]]$q01Error, ErrorCal2Outliers,
                    col = colorsParam2[condInterest], labels = c(""),
                    ylim = c(-0.06, 0.06), cex.axis = 1.5)
 
-mtext("Bias", side = 2, line = 2.4, cex = 2.5)
-grps <- paste0(round(meanAbsE[17:20], digits = 4))
+mtext("Error", side = 2, line = 2.4, cex = 2.5)
+grps <- round(meanAbsE[17:20], digits = 4)
 mtext (grps, at = (1:(nbEstimRates*length(TechniquesNames[condInterest])))[1:4], side = 1, line = 0.5, font=2, cex = 1.7,
        col = colorsParam2[condInterest])
 mtext ("MAE", at = 0.2, side = 1, line = 0.5, font=2, cex = 1.7)
@@ -208,6 +230,7 @@ grps <- c(expression(lambda*1), expression(lambda*2),
 mtext (grps[5], at = seq(from = (length(TechniquesNames[condInterest])+1)/2, to = length(TechniquesNames[condInterest])*nbEstimRates,
                          by = length(TechniquesNames[condInterest])), side = 1, line = 2, font=2, cex = 1.8)
 abline(h = 0, lty = 2, lwd= 0.5)
+points(meanE[17:20], col = "black", pch = 16)
 
 
 
