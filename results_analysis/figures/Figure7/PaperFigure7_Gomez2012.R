@@ -1,4 +1,4 @@
-## Plotting paper figure 5
+## Plotting paper figure 7
 
 # install.packages("FactoMineR")
 # install.packages("factoextra")
@@ -18,6 +18,6 @@ pca_test_real <- FactoMineR::PCA(test_real_encoded_sumstats)
 ## Individuals coordinates
 ind <- factoextra::get_pca_ind(pca_test_real)
 
-## Plotting figure 5
+## Plotting figure 7
 factoextra::fviz_pca_ind(pca_test_real, col.ind = c(rep("test set", 10000), "empirical"), label="none")
 factoextra::fviz_pca_ind(pca_test_real, col.ind = c(rep("test set", 10000), "empirical"), label="none", axes = c(3,4))
